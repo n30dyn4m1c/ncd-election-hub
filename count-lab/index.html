@@ -63,7 +63,7 @@ button,select,input{font:inherit;color:inherit}
 .steps i{font-style:normal;font-family:var(--mono);font-size:12px;width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;background:var(--ink);color:var(--bg)}
 
 /* Seat tabs */
-.seats{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.seats{display:grid;grid-template-columns:repeat(5,1fr);border:1.5px solid var(--ink);border-radius:var(--r);overflow:hidden;background:var(--surface)}
 .seat{appearance:none;border:0;background:transparent;padding:11px 14px;text-align:left;cursor:pointer;border-left:1.5px solid var(--ink);display:flex;flex-direction:column;gap:2px}
 .seat:first-child{border-left:0}
 .seat .k{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
@@ -71,7 +71,7 @@ button,select,input{font:inherit;color:inherit}
 .seat[aria-selected="true"]{background:var(--ink);color:var(--bg)}
 .seat[aria-selected="true"] .k{color:var(--bg);opacity:.75}
 .seat:hover:not([aria-selected="true"]){background:var(--surface2)}
-@media (max-width:760px){.seats{grid-template-columns:1fr 1fr}.seat:nth-child(3){border-left:0}.seat:nth-child(n+3){border-top:1.5px solid var(--ink)}}
+@media (max-width:760px){.seats{grid-template-columns:1fr 1fr}.seat:nth-child(odd){border-left:0}.seat:nth-child(n+3){border-top:1.5px solid var(--ink)}}
 .facts{display:flex;flex-wrap:wrap;gap:6px 26px;padding-block:12px 20px;color:var(--ink2);font-size:13.5px;align-items:baseline}
 .facts b{font-family:var(--mono);font-weight:500;color:var(--ink)}
 .facts .note{flex:1 1 320px;color:var(--muted)}
@@ -342,6 +342,8 @@ table.commit tr.tot td{font-weight:600;border-top:1.5px solid var(--ink);border-
 .qcta{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:22px}
 
 /* Mobile bottom bar */
+.nodata{margin-top:12px;padding:12px 14px;border-left:3px solid var(--warn);background:var(--surface);border-radius:0 5px 5px 0;font-size:14px;color:var(--ink2);max-width:90ch}
+.nodata b{color:var(--ink)}
 .mbar{display:none}
 body[data-mode="simple"] .mbar{display:none!important}
 @media (max-width:1040px){
@@ -359,7 +361,7 @@ body[data-mode="simple"] .mbar{display:none!important}
     <div>
       <div class="eyebrow"><span class="ballot" aria-hidden="true"><span>1</span><span>2</span><span>3</span></span> Campaign planner · NCD · Limited preferential voting</div>
       <h1>Moresby Count Lab</h1>
-      <p class="lede">How can a candidate win Moresby North-West, North-East, South or NCD Regional under 1-2-3 voting? Answer three questions in the quick view, or open the full planner to work through every activity, suburb and number. Both run hundreds of simulated counts.</p>
+      <p class="lede">How can a candidate win Moresby North-West, North-East, South, the new Motu-Koita seat or NCD Regional under 1-2-3 voting? Answer three questions in the quick view, or open the full planner to work through every activity, suburb and number. Both run hundreds of simulated counts.</p>
     </div>
     <div class="dates" aria-label="GE2027 key dates">
       <span class="cap">GE2027 calendar</span>
@@ -377,6 +379,7 @@ body[data-mode="simple"] .mbar{display:none!important}
   </div>
 
   <nav class="seats" role="tablist" aria-label="Electorate" id="seats"></nav>
+  <div class="nodata" id="noData" hidden><b>No past results for Motu-Koita Open.</b> It is a new electorate for 2027 and has never held a national election or by-election, and its boundaries are not yet public. These numbers are a stand-in: they use the size and shape of the July 2025 Motu Koita Assembly chairman race (about 14,000 ballots, counted under 1-2-3 voting), which only covers the Motu-Koitabu village wards. The real seat may be larger. Treat every figure here as illustrative.</div>
   <section id="simple" class="simple" aria-label="Quick view">
     <p class="qrace" id="qRace"></p>
     <div class="qgrid">
@@ -663,6 +666,8 @@ body[data-mode="simple"] .mbar{display:none!important}
       <li><a href="https://datareportal.com/reports/digital-2025-papua-new-guinea">DataReportal: Digital 2025 Papua New Guinea</a></li>
       <li><a href="https://en.wikipedia.org/wiki/National_Capital_District_(Papua_New_Guinea)">Wikipedia: NCD 2024 census population</a></li>
       <li><a href="https://www.thenational.com.pg/census-2024-results-under-question/">The National: Census 2024 results under question</a></li>
+      <li><a href="https://www.nbc.com.pg/post/24096/motu-koita-womens-representatives-confirmed-chairman-eliminations-underway">NBC: Motu Koita Assembly 2025 chairman count</a></li>
+      <li><a href="https://www.nbc.com.pg/post/24113/wavik-is-the-new-mka-chairman">NBC: Wavik is the new MKA chairman</a></li>
       <li><a href="https://asiapacificreport.nz/2022/07/05/papua-new-guinea-goes-to-the-polls-amid-controversy-over-missing-names/">Asia Pacific Report: Missing names on the 2022 roll</a></li>
       <li><a href="https://devpolicy.org/publications/discussion_papers/DP101-What-has-limited-preferential-voting-changed-in-PNG-May-2022.pdf">Devpolicy: What has LPV changed in PNG?</a></li>
     </ul>
@@ -705,6 +710,15 @@ const LPV = (function () {
       { name: "Bomana and Laloki", share: 0.24, mix: [0.03, 0.20, 0.38, 0.20, 0.10, 0.09] },
       { name: "Napa Napa and outer villages", share: 0.06, mix: [0.75, 0.15, 0.03, 0.03, 0.02, 0.02] }
     ],
+    /* Motu-Koita Open (new for 2027): no national results and no published boundaries. Areas follow the
+       Motu Koita Assembly village wards; shares and mix are guesses. */
+    mk: [
+      { name: "Hanuabada (Poreporena and Elevala)", share: 0.34, mix: [0.80, 0.08, 0.04, 0.03, 0.03, 0.02] },
+      { name: "Tatana and Baruni", share: 0.16, mix: [0.75, 0.10, 0.06, 0.04, 0.03, 0.02] },
+      { name: "Pari and Vabukori", share: 0.24, mix: [0.80, 0.08, 0.04, 0.03, 0.03, 0.02] },
+      { name: "Korobosea, Kirakira and Taurama villages", share: 0.18, mix: [0.65, 0.12, 0.08, 0.06, 0.05, 0.04] },
+      { name: "Napa Napa and outer villages", share: 0.08, mix: [0.75, 0.15, 0.03, 0.03, 0.02, 0.02] }
+    ],
     south: [
       { name: "Town, Konedobu and Ela Beach", share: 0.12, mix: [0.10, 0.25, 0.12, 0.13, 0.15, 0.25] },
       { name: "Boroko, Korobosea and Gabutu", share: 0.26, mix: [0.05, 0.25, 0.18, 0.14, 0.13, 0.25] },
@@ -726,7 +740,12 @@ const LPV = (function () {
       note2022: "2022: 8 candidates. The winner took 28,111 #1 votes of 46,618 formal (60.3%), so no preferences were counted." },
     reg: { id: "reg", name: "NCD Regional", abbr: "Regional", kind: "Regional", ballots2022: 216619, informal: 0.05, field2022: 29, places: 300,
       top: [19.51, 19.10, 12.67, 8.82, 7.16, 6.74, 3.57, 3.48, 2.89, 2.51, 2.45, 1.99, 1.56, 1.25, 1.06, 0.88, 0.79, 0.64], tailMass: 2.93,
-      note2022: "2022: 29 candidates. Final count 78,566 to 57,647, with about 80,000 ballots exhausted along the way." }
+      note2022: "2022: 29 candidates. Final count 78,566 to 57,647, with about 80,000 ballots exhausted along the way." },
+    // No national data: sized and shaped from the July 2025 Motu Koita Assembly chairman count (14,012 allowable ballots;
+    // progressive totals after the third exclusion: 4,446 / 4,109 / 2,726 / 2,579, plus 1,248 excluded).
+    mk: { id: "mk", name: "Motu-Koita", abbr: "MK", kind: "Open · new", noData: true, ballots2022: 14012, informal: 0.05, field2022: 7, places: 25,
+      top: [29.0, 27.0, 18.0, 17.0, 9.0], tailMass: 0,
+      note2022: "New seat for 2027 with no past results. Figures are a stand-in from the 2025 Motu Koita Assembly chairman race, where the top two finished about 4,400 and 4,100 before preferences." }
   };
   // Regional = all NCD areas, weighted by each open's 2022 ballots.
   AREAS.reg = [];
@@ -1285,8 +1304,8 @@ const pct = (x, d=0) => (x == null || isNaN(x)) ? "–" : (x*100).toFixed(d) + "
 const fmt = n => Math.round(n).toLocaleString("en-US");
 const kina = n => "K" + fmt(n);
 const SEED0 = 1000, NV = 2000;
-const SEAT_ORDER = ["nw","ne","south","reg"];
-const DEFAULT_BUDGET = { nw: 250000, ne: 300000, south: 200000, reg: 700000 };
+const SEAT_ORDER = ["nw","ne","south","mk","reg"];
+const DEFAULT_BUDGET = { nw: 250000, ne: 300000, south: 200000, mk: 100000, reg: 700000 };
 const PROFILES = [
   { id:"new", name:"First-time candidate", sub:"Little name recognition", share:3 },
   { id:"leader", name:"Known local leader", sub:"Councillor, pastor, businessperson", share:7 },
@@ -1422,7 +1441,10 @@ function renderAll(){ renderSeat(); renderCandidate(); renderBudget(); renderPla
 function renderSeat(){
   const s = seat(), A = state.assume, N = LPV.NCD;
   document.querySelectorAll(".seat").forEach(b => b.setAttribute("aria-selected", b.dataset.seat === state.seat));
-  $("facts").innerHTML = `<span>2022 ballots cast <b>${fmt(s.ballots2022)}${s.id==="reg"?"*":""}</b></span><span>Candidates in 2022 <b>${s.field2022}</b></span><span>Informal ballots <b>${(s.informal*100).toFixed(1)}%${s.id==="reg"?"*":""}</b></span><span class="note">${s.note2022}${s.id==="reg"?" *Estimated from the three opens combined.":""}</span>`;
+  $("noData").hidden = !s.noData;
+  $("facts").innerHTML = s.noData
+    ? `<span>Stand-in ballots <b>${fmt(s.ballots2022)}</b></span><span>Stand-in field <b>${s.field2022}</b></span><span class="note">${s.note2022}</span>`
+    : `<span>2022 ballots cast <b>${fmt(s.ballots2022)}${s.id==="reg"?"*":""}</b></span><span>Candidates in 2022 <b>${s.field2022}</b></span><span>Informal ballots <b>${(s.informal*100).toFixed(1)}%${s.id==="reg"?"*":""}</b></span><span class="note">${s.note2022}${s.id==="reg"?" *Estimated from the three opens combined.":""}</span>`;
   const pop = s.popEst, adults = pop * N.adultShare, ball = s.ballots2022 * A.ballotsGrowth;
   $("popstrip").innerHTML = `<span class="cap">People and voters · rough estimates</span>
     <div class="p"><div class="l">NCD population (2024 census)</div><div class="n">${fmt(N.pop2024)}</div></div>
@@ -1833,12 +1855,14 @@ function renderSimple(){
   if (!$("qVotes")) return;
   const s = seat(), sc = scenario(), p = plan(), areas = areaList(), formal = sc.formal;
   const w1 = s.top[0]/100 * s.ballots2022 * (1 - s.informal);
-  $("qRace").innerHTML = s.id === "reg"
+  $("qRace").innerHTML = s.noData
+    ? ""
+    : s.id === "reg"
     ? `<b>NCD Regional</b> covers the whole city: about ${fmt(s.ballots2022)} ballots were cast in 2022 across ${s.field2022} candidates. The governor won the final count 78,566 to 57,647.`
     : `<b>${s.name}</b>: about ${fmt(s.ballots2022)} ballots were cast in 2022, with ${s.field2022} candidates. The leader on #1 votes had about ${fmt(w1)}${s.id === "south" ? ", more than half, so they won outright." : "."}`;
   const v = expectedVotes(), mx = Math.round(formal * 0.5 / 1000) * 1000;
   $("qVotesR").max = Math.max(mx, v); $("qVotesR").value = v; if (document.activeElement !== $("qVotes")) $("qVotes").value = v;
-  $("qBench").innerHTML = `<span>That's <b>${pct(v/formal,1)}</b> of about ${fmt(formal)} formal votes</span><span>2022 leader: <b>${fmt(w1)}</b></span>` + (lastMain ? `<span>Winning line at the final count: about <b>${fmt(lastMain.sum.majorityFinal)}</b></span>` : "");
+  $("qBench").innerHTML = `<span>That's <b>${pct(v/formal,1)}</b> of about ${fmt(formal)} formal votes</span><span>${s.noData ? "Stand-in leader" : "2022 leader"}: <b>${fmt(w1)}</b></span>` + (lastMain ? `<span>Winning line at the final count: about <b>${fmt(lastMain.sum.majorityFinal)}</b></span>` : "");
   $("qArea").innerHTML = areas.map((a,i) => `<option value="${i}">${a.name}</option>`).join(""); $("qArea").value = homeArea();
   $("qBudgetR").value = Math.min(2000000, p.budget); if (document.activeElement !== $("qBudget")) $("qBudget").value = p.budget;
   const cur = p.origin || "balanced";
