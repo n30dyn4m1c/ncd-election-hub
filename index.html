@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCD Election Hub · PNG 2027</title>
+<meta name="description" content="Independent voter information for the five National Capital District seats in Papua New Guinea's 2027 general election.">
+<style>
+:root{--bg:#EDF0ED;--surface:#fff;--ink:#16201B;--ink2:#44514A;--muted:#6B7871;--line:#D3DAD5;--accent:#C8102E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1512;--surface:#18201C;--ink:#E3EAE6;--ink2:#B0BBB5;--muted:#85928B;--line:#2E3934;--accent:#F0435A}}
+:root[data-theme="dark"]{--bg:#0F1512;--surface:#18201C;--ink:#E3EAE6;--ink2:#B0BBB5;--muted:#85928B;--line:#2E3934;--accent:#F0435A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:28px 16px 60px}
+.eyebrow{font:12px ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(34px,7vw,56px);line-height:1.02;margin:6px 0 10px}
+h2{font-size:22px;margin:36px 0 12px}
+p{margin:0 0 12px;max-width:66ch;color:var(--ink2)}
+a{color:var(--ink)}
+.dates{display:flex;flex-wrap:wrap;gap:6px 24px;font-size:14px;color:var(--ink2);border-left:2px solid var(--ink);padding-left:12px;margin:18px 0}
+.dates b{display:block;color:var(--ink);font-family:ui-monospace,Menlo,monospace;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px}
+.card h3{margin:0 0 4px;font-size:17px}
+.card p{font-size:14px;margin:0}
+.tag{display:inline-block;font:11px ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:3px;padding:1px 6px;color:var(--muted);margin-top:8px}
+.tool{display:block;text-decoration:none;border-left:3px solid var(--accent)}
+.tool:hover{border-color:var(--ink)}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer p{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Port Moresby · General Election 2027</div>
+  <h1>NCD Election Hub</h1>
+  <p>Independent information for voters in the National Capital District: your seat, how the 1-2-3 count works, and reader polls as the race takes shape.</p>
+  <div class="dates">
+    <span>Nominations<b>29 Apr – 6 May 2027</b></span>
+    <span>Polling<b>26 Jun – 9 Jul 2027</b></span>
+    <span>Writs return<b>30 Jul 2027</b></span>
+  </div>
+
+  <h2>The five NCD seats</h2>
+  <div class="grid">
+    <div class="card"><h3>NCD Regional</h3><p>Every NCD voter also votes for the Regional seat.</p></div>
+    <div class="card"><h3>Moresby North-West</h3><p>Open electorate.</p></div>
+    <div class="card"><h3>Moresby North-East</h3><p>Open electorate.</p></div>
+    <div class="card"><h3>Moresby South</h3><p>Open electorate.</p></div>
+    <div class="card"><h3>Motu-Koita</h3><p>New Open electorate for 2027, split from North-West.</p><span class="tag">Boundaries pending</span></div>
+  </div>
+
+  <h2>Tools</h2>
+  <div class="grid">
+    <a class="card tool" href="count-lab/"><h3>Count simulator</h3><p>See how a Limited Preferential Voting count plays out in each NCD seat, and what it takes to win.</p></a>
+    <div class="card"><h3>Reader polls</h3><p>Issue polls for each electorate.</p><span class="tag">Coming soon</span></div>
+  </div>
+
+  <footer>
+    <p>This site is independent. It is not the PNG Electoral Commission. For official enrolment, polling places and results, see <a href="https://pngec.gov.pg">pngec.gov.pg</a>.</p>
+  </footer>
+</div>
+</body>
+</html>
