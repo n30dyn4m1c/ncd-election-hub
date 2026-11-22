@@ -60,6 +60,11 @@ async function inspect(browser, url, javaScriptEnabled) {
   }), INDEPENDENCE_TEXT);
   let axe = [];
   if (javaScriptEnabled) {
+    // Fallback fonts differ by device (Android has no condensed face), so
+    // also check sideways scroll with a deliberately wide font.
+    await page.addStyleTag({ content: '*{font-family:"DejaVu Sans",Verdana,sans-serif!important}' });
+    await page.waitForTimeout(100);
+    facts.overflow ||= await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     await page.addScriptTag({ content: axeSource });
     const res = await page.evaluate(async () => (await window.axe.run(document, { resultTypes: ["violations"] })).violations
       .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })));
