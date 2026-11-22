@@ -1,12 +1,10 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Moresby Count Lab · NCD election count simulator</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Moresby Count Lab · NCD election count simulator</title>
 <meta name="description" content="Simulate a Limited Preferential Voting count for the NCD seats in PNG's 2027 election.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
 </head><body>
 <style>
 :root{
-  --bg:#EDF0ED; --surface:#FFFFFF; --surface2:#F5F7F5; --ink:#16201B; --ink2:#44514A; --muted:#6B7871;
+  color-scheme:light;
+  --bg:#EDF0ED; --surface:#FFFFFF; --surface2:#F5F7F5; --ink:#16201B; --ink2:#44514A; --muted:#606C66;
   --line:#D3DAD5; --line2:#E5EAE6; --grid:#E4E9E5;
   --you:#C8102E; --you-soft:rgba(200,16,46,.08); --s1:#008A9E; --s2:#5A4FCF; --s3:#C26A00;
   --gold:#9A7400; --focus:#5A4FCF; --bar:#44514A; --bar-soft:#C9D1CB;
@@ -36,7 +34,7 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1220px;margin:0 auto;padding-inline:20px;padding-block:0 90px}
 h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:.01em;line-height:1.02;text-wrap:balance;margin:0}
 p{margin:0}
@@ -340,6 +338,7 @@ table.commit tr.tot td{font-weight:600;border-top:1.5px solid var(--ink);border-
 .qsteps b{color:var(--ink)}
 .qlesson{margin-top:14px;padding:10px 14px;border-left:3px solid var(--you);background:var(--surface2);font-size:14.5px;border-radius:0 5px 5px 0}
 .qcta{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:22px}
+.qcta .btn{white-space:normal;max-width:100%;text-align:left}
 
 /* Mobile bottom bar */
 .nodata{margin-top:12px;padding:12px 14px;border-left:3px solid var(--warn);background:var(--surface);border-radius:0 5px 5px 0;font-size:14px;color:var(--ink2);max-width:90ch}
@@ -365,9 +364,7 @@ body[data-mode="simple"] .mbar{display:none!important}
     </div>
     <div class="dates" aria-label="GE2027 key dates">
       <span class="cap">GE2027 calendar</span>
-      <span>Nominations<b>29 Apr – 6 May</b></span>
-      <span>Polling<b>26 Jun – 9 Jul</b></span>
-      <span>Writs return<b>30 Jul 2027</b></span>
+{{@dates:short}}
     </div>
   </header>
   <div class="modebar" role="tablist" aria-label="View" id="modebar">
@@ -394,7 +391,7 @@ body[data-mode="simple"] .mbar{display:none!important}
         </div>
         <div class="panel card q">
           <div class="qh"><span class="qn">2</span><h2>How much can you spend?</h2></div>
-          <p class="hint">Your whole campaign budget for about eight weeks, from the close of nominations (6 May 2027) to polling (26 June).</p>
+          <p class="hint">Your whole campaign budget for about eight weeks, from the close of nominations ({{@date:nominations.end}}) to polling ({{@date:polling.start:daymonth}}).</p>
           <div class="qvotes"><input type="range" id="qBudgetR" min="20000" max="2000000" step="10000" aria-label="Campaign budget"><div class="money qnum"><span>K</span><input type="number" id="qBudget" min="10000" step="10000" inputmode="numeric" aria-label="Campaign budget in kina"></div></div>
         </div>
         <div class="panel card q">
@@ -654,6 +651,7 @@ body[data-mode="simple"] .mbar{display:none!important}
   </div>
 
   <footer>
+    {{@independence}}
     Sources:
     <ul>
       <li><a href="https://results.pngec.gov.pg/57/Election-57.html">PNGEC: Moresby South Open 2022</a></li>

@@ -1,0 +1,19 @@
+{
+  "name": "ncd-election-hub",
+  "private": true,
+  "type": "module",
+  "description": "Independent voter information for the five NCD seats in PNG's 2027 general election.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "check": "node scripts/validate-data.mjs && node --test \"tests/*.test.mjs\" && node build.mjs && node scripts/check-site.mjs _site",
+    "check:browser": "node build.mjs && node scripts/check-browser.mjs _site"
+  },
+  "devDependencies": {
+    "axe-core": "4.14.0",
+    "playwright": "1.63.0"
+  }
+}

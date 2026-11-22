@@ -1,0 +1,52 @@
+[
+  {
+    "id": "reg",
+    "name": "NCD Regional",
+    "kind": "regional",
+    "blurb": "Every NCD voter also votes for the Regional seat.",
+    "boundary_status": "unchanged",
+    "enrolment": null,
+    "official_candidate_count": null,
+    "sources": ["pngec-2022-reg", "national-reg-final"]
+  },
+  {
+    "id": "nw",
+    "name": "Moresby North-West",
+    "kind": "open",
+    "blurb": "Open electorate.",
+    "boundary_status": "changed",
+    "enrolment": null,
+    "official_candidate_count": null,
+    "sources": ["pngec-2022-nw", "national-new-electorates"]
+  },
+  {
+    "id": "ne",
+    "name": "Moresby North-East",
+    "kind": "open",
+    "blurb": "Open electorate.",
+    "boundary_status": "unchanged",
+    "enrolment": null,
+    "official_candidate_count": null,
+    "sources": ["pngec-2022-ne"]
+  },
+  {
+    "id": "south",
+    "name": "Moresby South",
+    "kind": "open",
+    "blurb": "Open electorate.",
+    "boundary_status": "unchanged",
+    "enrolment": null,
+    "official_candidate_count": null,
+    "sources": ["pngec-2022-south"]
+  },
+  {
+    "id": "mk",
+    "name": "Motu-Koita",
+    "kind": "open",
+    "blurb": "New Open electorate for 2027, split from North-West.",
+    "boundary_status": "pending",
+    "enrolment": null,
+    "official_candidate_count": null,
+    "sources": ["national-new-electorates"]
+  }
+]

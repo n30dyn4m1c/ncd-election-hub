@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCD Election Hub · PNG 2027</title>
+<meta name="description" content="Independent voter information for the five National Capital District seats in Papua New Guinea's 2027 general election.">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Port Moresby · General Election 2027</div>
+  <h1>NCD Election Hub</h1>
+  <p>Independent information for voters in the National Capital District: your seat, how the 1-2-3 count works, and reader polls as the race takes shape.</p>
+  <div class="dates">
+{{@dates}}
+  </div>
+
+  <h2>The five NCD seats</h2>
+  <div class="grid">
+{{@seats}}
+  </div>
+
+  <h2>Tools</h2>
+  <div class="grid">
+    <a class="card tool" href="count-lab/"><h3>Count simulator</h3><p>See how a Limited Preferential Voting count plays out in each NCD seat, and what it takes to win.</p></a>
+    <div class="card"><h3>Reader polls</h3><p>Issue polls for each electorate.</p><span class="tag">Coming soon</span></div>
+  </div>
+
+  <footer>
+    {{@independence}}
+  </footer>
+</div>
+</body>
+</html>

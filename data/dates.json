@@ -1,0 +1,29 @@
+[
+  {
+    "id": "nominations",
+    "label": "Nominations",
+    "start": "2027-04-29",
+    "end": "2027-05-06",
+    "status": "unconfirmed",
+    "source": "national-ge2027-dates",
+    "previous": null
+  },
+  {
+    "id": "polling",
+    "label": "Polling",
+    "start": "2027-06-26",
+    "end": "2027-07-09",
+    "status": "unconfirmed",
+    "source": "national-ge2027-dates",
+    "previous": null
+  },
+  {
+    "id": "writs",
+    "label": "Writs return",
+    "start": "2027-07-30",
+    "end": null,
+    "status": "unconfirmed",
+    "source": "national-ge2027-dates",
+    "previous": null
+  }
+]
