@@ -1,0 +1,23 @@
+[
+  { "id": "funding", "audience": "journalists", "job": "See what the site is funded by", "status": "live", "page": "about/funding/" },
+  { "id": "corrections", "audience": "everyone", "job": "See what the site has corrected, and report an error", "status": "live", "page": "about/corrections/" },
+  { "id": "lpv-win", "audience": "candidates", "job": "What does it take to win under LPV", "status": "live", "page": "count-lab/" },
+
+  { "id": "which-seat", "audience": "voters", "job": "Which seat am I in", "status": "planned", "subtask": "V2" },
+  { "id": "who-is-standing", "audience": "voters", "job": "Who is standing in my seat", "status": "planned", "subtask": "V5" },
+  { "id": "formal-ballot", "audience": "voters", "job": "How do I mark a formal 1-2-3 ballot", "status": "planned", "subtask": "V3" },
+  { "id": "when-where", "audience": "voters", "job": "When and where do I vote", "status": "planned", "subtask": "V4" },
+  { "id": "enrolment", "audience": "voters", "job": "How do I check my enrolment", "status": "planned", "subtask": "V3" },
+  { "id": "whats-changed", "audience": "voters", "job": "What changed since last week", "status": "planned", "subtask": "V4" },
+  { "id": "who-won", "audience": "voters", "job": "Who won and by how much", "status": "planned", "subtask": "M3" },
+  { "id": "nomination-rules", "audience": "candidates", "job": "What are the nomination rules and dates", "status": "planned", "subtask": "U1" },
+  { "id": "seat-2022", "audience": "candidates", "job": "How did this seat behave in 2022", "status": "planned", "subtask": "V1" },
+  { "id": "get-listed", "audience": "candidates", "job": "How do I get listed or correct my listing", "status": "planned", "subtask": "V5" },
+  { "id": "check-count", "audience": "candidates", "job": "How do I check a count", "status": "planned", "subtask": "M2" },
+  { "id": "downloads", "audience": "journalists", "job": "Download results and candidate lists", "status": "planned", "subtask": "H2" },
+  { "id": "cite", "audience": "journalists", "job": "Cite a number with its source", "status": "planned", "subtask": "H1" },
+  { "id": "embed", "audience": "journalists", "job": "Embed a chart", "status": "planned", "subtask": "H2" },
+  { "id": "briefing", "audience": "election managers", "job": "Electorate briefing per seat", "status": "planned", "subtask": "M4" },
+  { "id": "count-tool", "audience": "election managers", "job": "Count arithmetic tool", "status": "planned", "subtask": "M2" },
+  { "id": "scrutineers", "audience": "election managers", "job": "Scrutineer coverage planning", "status": "planned", "subtask": "R3" }
+]

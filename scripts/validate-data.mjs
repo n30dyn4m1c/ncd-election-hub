@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 export const DATE_STATUSES = ["unconfirmed", "announced", "gazetted", "changed"];
 export const BOUNDARY_STATUSES = ["unchanged", "changed", "pending"];
 export const SEAT_KINDS = ["open", "regional"];
+export const FUNDING_KINDS = ["enhanced-profile", "briefing", "sponsorship", "grant", "partnership", "test"];
 
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 const isIso = (s) => typeof s === "string" && ISO.test(s) && !Number.isNaN(Date.parse(s + "T00:00:00Z"));
@@ -14,7 +15,10 @@ const isHttps = (s) => typeof s === "string" && /^https:\/\/[^\s]+$/.test(s);
 
 export function loadData(dir) {
   const read = (f) => JSON.parse(readFileSync(join(dir, f), "utf8"));
-  return { sources: read("sources.json"), dates: read("dates.json"), seats: read("seats.json") };
+  return {
+    sources: read("sources.json"), dates: read("dates.json"), seats: read("seats.json"),
+    funding: read("funding.json"), corrections: read("corrections.json"), config: read("config.json"),
+  };
 }
 
 function checkSources(sources, err) {
@@ -72,14 +76,48 @@ function checkSeats(seats, byId, err) {
   });
 }
 
+function checkFunding(funding, err) {
+  if (!Array.isArray(funding)) return err("must be an array");
+  const seen = new Set();
+  funding.forEach((f, i) => {
+    const at = `funding[${i}]${f && f.id ? ` (${f.id})` : ""}`;
+    if (!f || typeof f.id !== "string" || !f.id) return err(`${at}: missing id`);
+    if (seen.has(f.id)) err(`${at}: duplicate id`);
+    seen.add(f.id);
+    if (!isIso(f.date)) err(`${at}: date must be YYYY-MM-DD`);
+    for (const k of ["payer", "purpose"]) if (typeof f[k] !== "string" || !f[k]) err(`${at}: missing ${k}`);
+    if (!FUNDING_KINDS.includes(f.kind)) err(`${at}: kind must be one of ${FUNDING_KINDS.join(", ")}`);
+    if (typeof f.amount_kina !== "number" || !(f.amount_kina >= 0)) err(`${at}: amount_kina must be a number, 0 or more`);
+  });
+}
+
+function checkCorrections(corrections, err) {
+  if (!Array.isArray(corrections)) return err("must be an array");
+  const seen = new Set();
+  corrections.forEach((c, i) => {
+    const at = `corrections[${i}]${c && c.id ? ` (${c.id})` : ""}`;
+    if (!c || typeof c.id !== "string" || !c.id) return err(`${at}: missing id`);
+    if (seen.has(c.id)) err(`${at}: duplicate id`);
+    seen.add(c.id);
+    if (!isIso(c.date)) err(`${at}: date must be YYYY-MM-DD`);
+    for (const k of ["page", "page_title", "was", "now"]) if (typeof c[k] !== "string" || !c[k]) err(`${at}: missing ${k}`);
+    if (typeof c.page === "string" && (/^[a-z]+:/i.test(c.page) || c.page.startsWith("/"))) err(`${at}: page must be a site path like "count-lab/"`);
+  });
+}
+
 /** Returns { area: [error, ...] } for each area, in print order. */
 export function validate(data) {
-  const out = { sources: [], dates: [], seats: [] };
+  const out = { sources: [], dates: [], seats: [], funding: [], corrections: [], config: [] };
   const errFor = (area) => (msg) => out[area].push(msg);
   checkSources(data.sources, errFor("sources"));
   const byId = new Map((Array.isArray(data.sources) ? data.sources : []).filter((s) => s && s.id).map((s) => [s.id, s]));
   checkDates(data.dates, byId, errFor("dates"));
   checkSeats(data.seats, byId, errFor("seats"));
+  checkFunding(data.funding, errFor("funding"));
+  checkCorrections(data.corrections, errFor("corrections"));
+  const c = data.config, cerr = errFor("config");
+  if (!c || typeof c !== "object" || Array.isArray(c)) cerr("must be an object");
+  else if (c.contact_email !== null && !(typeof c.contact_email === "string" && /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(c.contact_email))) cerr("contact_email must be an email address or null");
   return out;
 }
 
