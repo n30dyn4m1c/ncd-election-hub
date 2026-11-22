@@ -1,11 +1,45 @@
 # NCD Election Hub
 
 Independent voter information for the five National Capital District seats in
-Papua New Guinea's 2027 general election. Plain static HTML, no build step.
+Papua New Guinea's 2027 general election.
 
-| Path | Page |
+The published site is plain static HTML with no runtime dependencies. A small
+build (Node 22 built-ins only) fills the pages from sourced data files, so a
+fact such as a polling date is written once and used everywhere.
+
+| Path | Holds |
 |---|---|
-| `index.html` | Hub home: seats, key dates, tools |
-| `count-lab/` | Moresby Count Lab, the LPV count simulator |
+| `src/home.html` | Hub home: seats, key dates, tools → `/` |
+| `src/count-lab/index.html` | Moresby Count Lab, the LPV count simulator → `/count-lab/` |
+| `src/assets/site.css` | Shared stylesheet for content pages |
+| `data/sources.json` | Every source: publisher, URL, archive copy, retrieval date, licence, official or not |
+| `data/dates.json` | Election dates, each with a status (`unconfirmed`, `announced`, `gazetted`, `changed`) and a source |
+| `data/seats.json` | The five seats, boundary status and sources |
+| `build.mjs` | Builds `_site/` from `src/` and `data/` |
+| `scripts/validate-data.mjs` | Checks the data: shapes, that every source id resolves, and that only officially sourced dates leave `unconfirmed` |
+| `scripts/check-site.mjs` | Checks the built pages: `lang`, title, description, one `h1`, independence footer, internal links, no third-party resources, gzip budgets |
+| `scripts/check-browser.mjs` | Loads each page in Chromium at 360 px, with and without JavaScript, and runs axe-core |
+| `tests/` | `node:test` suites, including the Count Lab engine golden baseline |
 
-Published to GitHub Pages by `.github/workflows/pages.yml` on every push to `main`.
+Pages use `{{@token}}` placeholders that the build fills from `data/`, for
+example `{{@dates}}`, `{{@seats}}`, `{{@date:nominations.end}}` and
+`{{@independence}}`. An unknown token fails the build.
+
+## Working on it
+
+```bash
+npm run check          # validate data, run tests, build _site/, check pages (under a second)
+npm run check:browser  # needs `npm ci` and a Playwright Chromium
+python3 -m http.server -d _site 8765   # preview at http://localhost:8765/
+```
+
+To change a date, edit `data/dates.json` and rebuild. A date can only move off
+`unconfirmed` if its source is marked `"official": true`.
+
+The Count Lab engine (`<script id="engine">`) is pinned by a golden test.
+Any change to its simulated output fails `npm run check`.
+
+## Deploying
+
+`.github/workflows/pages.yml` runs both checks on every push and pull request.
+On `main`, once they pass, it builds `_site/` and publishes it to GitHub Pages.

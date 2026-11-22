@@ -1,0 +1,155 @@
+[
+  {
+    "id": "pngec-home",
+    "publisher": "PNG Electoral Commission",
+    "title": "PNG Electoral Commission",
+    "url": "https://pngec.gov.pg",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": true
+  },
+  {
+    "id": "pngec-2022-south",
+    "publisher": "PNG Electoral Commission",
+    "title": "PNGEC: Moresby South Open 2022",
+    "url": "https://results.pngec.gov.pg/57/Election-57.html",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": true
+  },
+  {
+    "id": "pngec-2022-nw",
+    "publisher": "PNG Electoral Commission (mirror)",
+    "title": "PNGEC: Moresby North-West Open 2022",
+    "url": "https://results.pngec.picl.co.uk/58/Election-58.html",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false,
+    "note": "Hosted on a non-government domain. Replace with a results.pngec.gov.pg copy in U3."
+  },
+  {
+    "id": "pngec-2022-ne",
+    "publisher": "PNG Electoral Commission",
+    "title": "PNGEC: Moresby North-East Open 2022",
+    "url": "https://results.pngec.gov.pg/56/Election-56.html",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": true
+  },
+  {
+    "id": "pngec-2022-reg",
+    "publisher": "PNG Electoral Commission",
+    "title": "PNGEC: NCD Regional 2022 (North-East #1 votes)",
+    "url": "https://results.pngec.gov.pg/113/District-1-56.html",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": true
+  },
+  {
+    "id": "national-reg-final",
+    "publisher": "The National",
+    "title": "The National: NCD Regional final count",
+    "url": "https://www.thenational.com.pg/after-five-months-parkop-declared-winner/",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "national-ge2027-dates",
+    "publisher": "The National",
+    "title": "The National: GE2027 dates",
+    "url": "https://www.thenational.com.pg/electoral-commission-releases-election-dates/",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false,
+    "note": "Newspaper report. No official PNGEC timetable found yet (U1)."
+  },
+  {
+    "id": "national-new-electorates",
+    "publisher": "The National",
+    "title": "The National: New electorates for GE27",
+    "url": "https://www.thenational.com.pg/six-new-electorates-prepare-for-polls-in-ge27/",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "datareportal-2025",
+    "publisher": "DataReportal",
+    "title": "DataReportal: Digital 2025 Papua New Guinea",
+    "url": "https://datareportal.com/reports/digital-2025-papua-new-guinea",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "wikipedia-ncd-census",
+    "publisher": "Wikipedia",
+    "title": "Wikipedia: NCD 2024 census population",
+    "url": "https://en.wikipedia.org/wiki/National_Capital_District_(Papua_New_Guinea)",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": "CC BY-SA 4.0",
+    "official": false,
+    "note": "Stand-in. Replace with the National Statistical Office release (F4/U1); nso.gov.pg was unreachable when this file was made."
+  },
+  {
+    "id": "national-census-question",
+    "publisher": "The National",
+    "title": "The National: Census 2024 results under question",
+    "url": "https://www.thenational.com.pg/census-2024-results-under-question/",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "nbc-mka-2025-count",
+    "publisher": "NBC PNG",
+    "title": "NBC: Motu Koita Assembly 2025 chairman count",
+    "url": "https://www.nbc.com.pg/post/24096/motu-koita-womens-representatives-confirmed-chairman-eliminations-underway",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "nbc-mka-2025-winner",
+    "publisher": "NBC PNG",
+    "title": "NBC: Wavik is the new MKA chairman",
+    "url": "https://www.nbc.com.pg/post/24113/wavik-is-the-new-mka-chairman",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "apr-2022-roll",
+    "publisher": "Asia Pacific Report",
+    "title": "Asia Pacific Report: Missing names on the 2022 roll",
+    "url": "https://asiapacificreport.nz/2022/07/05/papua-new-guinea-goes-to-the-polls-amid-controversy-over-missing-names/",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  },
+  {
+    "id": "devpolicy-dp101",
+    "publisher": "Development Policy Centre, ANU",
+    "title": "Devpolicy: What has LPV changed in PNG?",
+    "url": "https://devpolicy.org/publications/discussion_papers/DP101-What-has-limited-preferential-voting-changed-in-PNG-May-2022.pdf",
+    "archive_url": null,
+    "retrieved": null,
+    "licence": null,
+    "official": false
+  }
+]
