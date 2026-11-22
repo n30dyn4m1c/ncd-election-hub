@@ -6,7 +6,8 @@
 //   indep     whether the footer carries the independence statement
 //   nojs      with JavaScript off: the h1 shows and nothing scrolls sideways
 //             (required for content pages; reported only for tools)
-//   axe       serious or critical axe-core violations (must be none)
+//   axe       serious or critical axe-core violations (must be none), light and dark
+//   theme     the theme switch cycles Auto → Light → Dark and the choice survives a reload
 // Usage: node scripts/check-browser.mjs _site
 import { createServer } from "node:http";
 import { readFileSync, existsSync, statSync, readdirSync } from "node:fs";
@@ -65,13 +66,40 @@ async function inspect(browser, url, javaScriptEnabled) {
     await page.addStyleTag({ content: '*{font-family:"DejaVu Sans",Verdana,sans-serif!important}' });
     await page.waitForTimeout(100);
     facts.overflow ||= await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
-    await page.addScriptTag({ content: axeSource });
-    const res = await page.evaluate(async () => (await window.axe.run(document, { resultTypes: ["violations"] })).violations
-      .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })));
-    axe = res.filter((v) => v.impact === "serious" || v.impact === "critical");
+    axe = await runAxe(page);
   }
   await ctx.close();
   return { errs, external: [...external], ...facts, axe };
+}
+
+const runAxe = async (page) => {
+  await page.addScriptTag({ content: axeSource });
+  const res = await page.evaluate(async () => (await window.axe.run(document, { resultTypes: ["violations"] })).violations
+    .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })));
+  return res.filter((v) => v.impact === "serious" || v.impact === "critical");
+};
+
+/** Click the theme switch through Light to Dark, reload, then run axe in dark. */
+async function themeCheck(browser, url) {
+  const ctx = await browser.newContext({ viewport: { width: 360, height: 740 }, colorScheme: "light" });
+  const page = await ctx.newPage();
+  try {
+    await page.goto(url, { waitUntil: "load" });
+    const btn = page.locator("#themeBtn");
+    if (!(await btn.isVisible())) return { theme: "missing", axeDark: [] };
+    const state = () => page.evaluate(() => [document.documentElement.dataset.theme || "auto", document.getElementById("themeBtn").textContent]);
+    const seen = [await state()];
+    await btn.click(); seen.push(await state());
+    await btn.click(); seen.push(await state());
+    await page.reload({ waitUntil: "load" });
+    seen.push(await state());
+    const want = [["auto", "Theme: Auto"], ["light", "Theme: Light"], ["dark", "Theme: Dark"], ["dark", "Theme: Dark"]];
+    const theme = JSON.stringify(seen) === JSON.stringify(want) ? "OK" : `FAIL ${JSON.stringify(seen)}`;
+    await page.waitForTimeout(300);
+    return { theme, axeDark: await runAxe(page) };
+  } finally {
+    await ctx.close();
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -87,9 +115,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const tool = TOOL_PREFIXES.some((t) => p.startsWith(t));
       const on = await inspect(browser, base + p.replace(/(^|\/)index\.html$/, "$1"), true);
       const off = await inspect(browser, base + p.replace(/(^|\/)index\.html$/, "$1"), false);
+      const { theme, axeDark } = await themeCheck(browser, base + p.replace(/(^|\/)index\.html$/, "$1"));
       const nojs = off.h1 && !off.overflow ? "OK" : "FAIL";
-      const report = { path, errs: on.errs, external: on.external, overflow: on.overflow, lang: on.lang, indep: on.indep, nojs, axe: on.axe.map((v) => `${v.impact} ${v.id} x${v.nodes}: ${v.help}`) };
-      const bad = on.errs.length || on.external.length || on.overflow || !on.lang || !on.indep || on.axe.length || (!tool && nojs !== "OK");
+      const fmt = (list, mode) => list.map((v) => `${mode} ${v.impact} ${v.id} x${v.nodes}: ${v.help}`);
+      const axe = [...fmt(on.axe, "light"), ...fmt(axeDark, "dark")];
+      const report = { path, errs: on.errs, external: on.external, overflow: on.overflow, lang: on.lang, indep: on.indep, nojs, theme, axe };
+      const bad = on.errs.length || on.external.length || on.overflow || !on.lang || !on.indep || axe.length || theme !== "OK" || (!tool && nojs !== "OK");
       if (bad) failed = true;
       console.log(`${bad ? "FAIL" : "OK  "} ${JSON.stringify(report)}`);
     }

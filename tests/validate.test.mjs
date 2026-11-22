@@ -8,7 +8,7 @@ const fresh = () => structuredClone(loadData(DATA));
 const errors = (data) => Object.values(validate(data)).flat();
 
 test("data validation: repository data is clean", () => {
-  assert.deepEqual(validate(fresh()), { sources: [], dates: [], seats: [] });
+  assert.deepEqual(validate(fresh()), { sources: [], dates: [], seats: [], funding: [], corrections: [] });
 });
 
 test("data validation: a gazetted date needs an official source", () => {
@@ -49,4 +49,16 @@ test("data validation: bad shapes are reported, not thrown", () => {
   d.seats[0].kind = "senate";
   const e = errors(d).join("\n");
   for (const re of [/end is before start/, /url must be https/, /duplicate id/, /kind must be one of/]) assert.match(e, re);
+});
+
+test("data validation: funding and corrections entries are checked", () => {
+  const d = fresh();
+  d.funding = [
+    { id: "t1", date: "2027-01-10", payer: "Test", kind: "test", amount_kina: 1, purpose: "Test payment" },
+    { id: "t1", date: "soon", payer: "", kind: "donation", amount_kina: -5, purpose: "x" },
+  ];
+  d.corrections = [{ id: "c1", date: "2027-01-11", page: "https://example.com", page_title: "Home", was: "a", now: "b" }];
+  const e = validate(d);
+  for (const re of [/duplicate id/, /date must be/, /missing payer/, /kind must be one of/, /amount_kina/]) assert.match(e.funding.join("\n"), re);
+  assert.match(e.corrections.join("\n"), /page must be a site path/);
 });

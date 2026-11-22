@@ -5,38 +5,14 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync } from "no
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadData } from "./scripts/validate-data.mjs";
+import { INDEPENDENCE, THEME_HEAD, footer, esc } from "./src/layout.mjs";
+import { formatDate, formatSpan } from "./src/dates.mjs";
+import { aboutPages } from "./src/about.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 
-export const INDEPENDENCE =
-  'This site is independent. It is not the PNG Electoral Commission. For official enrolment, polling places and results, see <a href="https://pngec.gov.pg">pngec.gov.pg</a>.';
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const MONTHS_LONG = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-
-function parts(iso) {
-  const [y, m, d] = iso.split("-").map(Number);
-  return { y, m: m - 1, d };
-}
-
-/** "6 May 2027"; style "daymonth" gives "26 June". */
-export function formatDate(iso, style = "full") {
-  const { y, m, d } = parts(iso);
-  if (style === "daymonth") return `${d} ${MONTHS_LONG[m]}`;
-  if (style === "full") return `${d} ${MONTHS[m]} ${y}`;
-  throw new Error(`unknown date style "${style}"`);
-}
-
-/** "29 Apr – 6 May 2027", or without the year when withYear is false. */
-export function formatSpan(entry, { withYear = true } = {}) {
-  const a = parts(entry.start);
-  if (!entry.end) return `${a.d} ${MONTHS[a.m]} ${a.y}`;
-  const b = parts(entry.end);
-  const left = a.y === b.y ? `${a.d} ${MONTHS[a.m]}` : `${a.d} ${MONTHS[a.m]} ${a.y}`;
-  return `${left} – ${b.d} ${MONTHS[b.m]}${withYear || a.y !== b.y ? ` ${b.y}` : ""}`;
-}
+export { INDEPENDENCE } from "./src/layout.mjs";
+export { formatDate, formatSpan } from "./src/dates.mjs";
 
 const dateSpans = (dates, opts, indent) =>
   dates.map((d) => `${indent}<span>${esc(d.label)}<b>${formatSpan(d, opts)}</b></span>`).join("\n");
@@ -47,13 +23,17 @@ const seatCard = (s) => {
 };
 
 /** Fill {{@token}} placeholders. Throws on any token it does not know. */
-export function fill(template, data, file) {
+export function fill(template, data, file, path = "index.html") {
   const byId = new Map(data.dates.map((d) => [d.id, d]));
   const out = template.replace(/\{\{@([^}]*)\}\}/g, (_, token) => {
     const [name, arg, style] = token.split(":");
     switch (name) {
       case "independence":
         return `<p>${INDEPENDENCE}</p>`;
+      case "footer":
+        return footer(path);
+      case "theme-head":
+        return THEME_HEAD;
       case "dates":
         if (arg === undefined) return dateSpans(data.dates, { withYear: true }, "    ");
         if (arg === "short") return dateSpans(data.dates, { withYear: false }, "      ");
@@ -77,8 +57,9 @@ export function renderPages(root = ROOT) {
   const data = loadData(join(root, "data"));
   const read = (p) => readFileSync(join(root, "src", p), "utf8");
   const pages = new Map();
-  pages.set("index.html", fill(read("home.html"), data, "src/home.html"));
-  pages.set("count-lab/index.html", fill(read("count-lab/index.html"), data, "src/count-lab/index.html"));
+  pages.set("index.html", fill(read("home.html"), data, "src/home.html", "index.html"));
+  pages.set("count-lab/index.html", fill(read("count-lab/index.html"), data, "src/count-lab/index.html", "count-lab/index.html"));
+  for (const [path, html] of aboutPages(data)) pages.set(path, html);
   pages.set("assets/site.css", read("assets/site.css"));
   return pages;
 }
