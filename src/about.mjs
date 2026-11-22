@@ -43,6 +43,13 @@ function charter() {
   </ol>
   <p>Rules 1, 5 and 6 are checked automatically every time the site is built, and a page that breaks one is not published. Rules 2 to 4 will be checked the same way when candidate listings open.</p>
 
+  <h2 id="money">Money</h2>
+  <ul class="rules">
+    <li><b>No political advertising.</b> The site does not sell advertising to parties, candidates or their businesses, and runs no ad networks.</li>
+    <li><b>Readers never pay.</b> All voter information is free to read, with no paywall and no sign-up.</li>
+  </ul>
+  <p>Any money the site does receive, from candidate listings, campaign products, non-political sponsors or grants, is recorded in the public <a href="funding/">funding ledger</a>.</p>
+
   <h2>More about how the site works</h2>
   <div class="grid">
     <a class="card tool" href="funding/"><h3>Funding</h3><p>Who has paid the site, how much, and for what.</p></a>
@@ -79,6 +86,7 @@ ${ledger}
 }
 
 function corrections(data) {
+  const email = data.config.contact_email;
   const rows = data.corrections
     .slice()
     .sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id))
@@ -99,8 +107,11 @@ function corrections(data) {
 ${log}
   </section>
   <h2 id="report">Report an error</h2>
-  <p>Open an issue on the site's <a href="${REPO}/issues/new">public GitHub page</a>. You need a free GitHub account. Say which page is wrong, what it should say, and where that is published, with a link if you have one.</p>
-  <p>Reports are public. Do not include anything you would not want others to read.</p>`,
+  <p>Say which page is wrong, what it should say, and where that is published, with a link if you have one.</p>
+${email ? `  <p><b>By email:</b> <a href="mailto:${esc(email)}">${esc(email)}</a>. Emailed reports are read only by the people who run the site.</p>
+  <p><b>On GitHub:</b> open an issue on the site's <a href="${REPO}/issues/new">public GitHub page</a>. You need a free GitHub account, and these reports are public.</p>`
+  : `  <p>Open an issue on the site's <a href="${REPO}/issues/new">public GitHub page</a>. You need a free GitHub account.</p>
+  <p>Reports are public. Do not include anything you would not want others to read.</p>`}`,
   });
 }
 
@@ -142,7 +153,8 @@ ${table(["Source", "Publisher", "Official", "Retrieved", "Archive"], sourceRows,
   });
 }
 
-function privacy() {
+function privacy(data) {
+  const email = data.config.contact_email;
   return page({
     path: "about/privacy/index.html",
     title: "Privacy",
@@ -162,7 +174,7 @@ function privacy() {
   <p>The site is hosted on GitHub Pages. Like any web host, GitHub may log the IP address of visitors for security. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub privacy statement</a>.</p>
 
   <h2>Reporting an error</h2>
-  <p>Error reports go through GitHub and are public. See <a href="../corrections/#report">how to report an error</a>.</p>
+  <p>${email ? "Error reports sent by email are read only by the people who run the site. Reports made on GitHub are public." : "Error reports go through GitHub and are public."} See <a href="../corrections/#report">how to report an error</a>.</p>
 
   <h2>Changes</h2>
   <p>If the site adds an email list or reader polls, this page will name the service used and what it stores before that feature goes live.</p>`,
@@ -176,6 +188,6 @@ export function aboutPages(data) {
     ["about/funding/index.html", funding(data)],
     ["about/corrections/index.html", corrections(data)],
     ["about/methodology/index.html", methodology(data)],
-    ["about/privacy/index.html", privacy()],
+    ["about/privacy/index.html", privacy(data)],
   ]);
 }

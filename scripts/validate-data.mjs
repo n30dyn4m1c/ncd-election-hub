@@ -17,7 +17,7 @@ export function loadData(dir) {
   const read = (f) => JSON.parse(readFileSync(join(dir, f), "utf8"));
   return {
     sources: read("sources.json"), dates: read("dates.json"), seats: read("seats.json"),
-    funding: read("funding.json"), corrections: read("corrections.json"),
+    funding: read("funding.json"), corrections: read("corrections.json"), config: read("config.json"),
   };
 }
 
@@ -107,7 +107,7 @@ function checkCorrections(corrections, err) {
 
 /** Returns { area: [error, ...] } for each area, in print order. */
 export function validate(data) {
-  const out = { sources: [], dates: [], seats: [], funding: [], corrections: [] };
+  const out = { sources: [], dates: [], seats: [], funding: [], corrections: [], config: [] };
   const errFor = (area) => (msg) => out[area].push(msg);
   checkSources(data.sources, errFor("sources"));
   const byId = new Map((Array.isArray(data.sources) ? data.sources : []).filter((s) => s && s.id).map((s) => [s.id, s]));
@@ -115,6 +115,9 @@ export function validate(data) {
   checkSeats(data.seats, byId, errFor("seats"));
   checkFunding(data.funding, errFor("funding"));
   checkCorrections(data.corrections, errFor("corrections"));
+  const c = data.config, cerr = errFor("config");
+  if (!c || typeof c !== "object" || Array.isArray(c)) cerr("must be an object");
+  else if (c.contact_email !== null && !(typeof c.contact_email === "string" && /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(c.contact_email))) cerr("contact_email must be an email address or null");
   return out;
 }
 

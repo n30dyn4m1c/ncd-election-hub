@@ -19,6 +19,7 @@ fact such as a polling date is written once and used everywhere.
 | `data/seats.json` | The five seats, boundary status and sources |
 | `data/funding.json` | The public funding ledger: date, payer, kind, amount in kina, purpose |
 | `data/corrections.json` | The corrections log: date, page, what was wrong, what it says now |
+| `data/config.json` | Site settings. `contact_email` (null for now) adds an email route for error reports once set |
 | `build.mjs` | Builds `_site/` from `src/` and `data/` |
 | `scripts/validate-data.mjs` | Checks the data: shapes, that every source id resolves, and that only officially sourced dates leave `unconfirmed` |
 | `scripts/check-site.mjs` | Checks the built pages: `lang`, title, description, one `h1`, independence footer, internal links, no third-party resources, gzip budgets |

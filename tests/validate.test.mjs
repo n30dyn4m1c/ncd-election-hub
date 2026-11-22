@@ -8,7 +8,7 @@ const fresh = () => structuredClone(loadData(DATA));
 const errors = (data) => Object.values(validate(data)).flat();
 
 test("data validation: repository data is clean", () => {
-  assert.deepEqual(validate(fresh()), { sources: [], dates: [], seats: [], funding: [], corrections: [] });
+  assert.deepEqual(validate(fresh()), { sources: [], dates: [], seats: [], funding: [], corrections: [], config: [] });
 });
 
 test("data validation: a gazetted date needs an official source", () => {
@@ -61,4 +61,12 @@ test("data validation: funding and corrections entries are checked", () => {
   const e = validate(d);
   for (const re of [/duplicate id/, /date must be/, /missing payer/, /kind must be one of/, /amount_kina/]) assert.match(e.funding.join("\n"), re);
   assert.match(e.corrections.join("\n"), /page must be a site path/);
+});
+
+test("data validation: contact_email is an address or null", () => {
+  const d = fresh();
+  d.config.contact_email = "not an email";
+  assert.match(validate(d).config.join(), /contact_email/);
+  d.config.contact_email = "errors@example.org";
+  assert.deepEqual(validate(d).config, []);
 });

@@ -23,10 +23,23 @@ test("trust pages: every built page's footer links all five trust pages", () => 
   }
 });
 
-test("trust pages: charter lists the six rules", () => {
+test("trust pages: charter lists the six rules and the two money rules", () => {
   const html = aboutPages(data()).get("about/index.html");
   const rules = html.match(/<ol class="rules">([\s\S]*?)<\/ol>/)[1];
   assert.equal((rules.match(/<li>/g) || []).length, 6);
+  assert.match(html, /No political advertising/);
+  assert.match(html, /Readers never pay/);
+});
+
+test("trust pages: error reports offer email once contact_email is set", () => {
+  const d = data();
+  d.config.contact_email = null;
+  let p = aboutPages(d);
+  assert.doesNotMatch(p.get("about/corrections/index.html"), /mailto:/);
+  d.config.contact_email = "errors@example.org";
+  p = aboutPages(d);
+  assert.match(p.get("about/corrections/index.html"), /href="mailto:errors@example\.org"/);
+  assert.match(p.get("about/privacy/index.html"), /sent by email are read only/);
 });
 
 test("trust pages: empty ledger and log say so", () => {
